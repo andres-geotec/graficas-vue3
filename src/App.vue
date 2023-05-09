@@ -9,5 +9,4 @@ import SisdaiBarras from '@/components/SisdaiBarras.vue'
   </SisdaiGraficas>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,6 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
-import { describe, test } from "vitest";
-import SisdaiGraficas from "@/componentes/SisdaiGraficas.vue";
+import { shallowMount } from '@vue/test-utils'
+import { describe, test } from 'vitest'
+import SisdaiGraficas from '@/componentes/SisdaiGraficas.vue'
 
 describe('SisdaiGraficas', () => {
   test('primeras pruebas', () => {

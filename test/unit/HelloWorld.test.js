@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest'
-import HelloWorld from "@/components/HelloWorld.vue";
-import { mount } from '@vue/test-utils';
+import HelloWorld from '@/components/HelloWorld.vue'
+import { mount } from '@vue/test-utils'
 
 describe('HelloWorld.vue', () => {
   test('debería representar el título correctamente', () => {
@@ -8,7 +8,7 @@ describe('HelloWorld.vue', () => {
 
     const wrapper = mount(HelloWorld, {
       props: {
-        msg
+        msg,
       },
     })
 

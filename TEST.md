@@ -7,10 +7,12 @@ En esta guía, cubriremos la terminología básica y brindaremos nuestras recome
 Hay una sección específica de Vue que cubre componibles. Consulte [Testing Composables](#testing-composables) a continuación para obtener más detalles.
 
 ## Cuándo probar
+
 ​
 ¡Comienza a probar temprano! Le recomendamos que comience a escribir pruebas tan pronto como pueda. Cuanto más espere para agregar pruebas a su aplicación, más dependencias tendrá su aplicación y más difícil será comenzar.
 
 ## Tipos de prueba
+
 ​
 Al diseñar la estrategia de prueba de su aplicación Vue, debe aprovechar los siguientes tipos de prueba:
 
@@ -21,6 +23,7 @@ Al diseñar la estrategia de prueba de su aplicación Vue, debe aprovechar los s
 Cada tipo de prueba juega un papel en la estrategia de prueba de su aplicación y cada uno lo protegerá contra diferentes tipos de problemas.
 
 ## Descripción general
+
 ​
 Discutiremos brevemente qué es cada uno de estos, cómo se pueden implementar para las aplicaciones Vue y brindaremos algunas recomendaciones generales.
 
@@ -34,7 +37,7 @@ Tomemos por ejemplo esta función `increment`:
 
 ```js
 // helpers.js
-export function increment (current, max = 10) {
+export function increment(current, max = 10) {
   if (current < max) {
     return current + 1
   }
@@ -83,27 +86,31 @@ Una categoría de funciones específicas de las aplicaciones Vue son [Composable
 Un componente se puede probar de dos maneras:
 
 1. Whitebox: Pruebas unitarias
-  
-    Las pruebas que son "pruebas Whitebox" conocen los detalles de implementación y las dependencias de un componente. Se centran en aislar el componente bajo prueba. Estas pruebas generalmente implicarán burlarse de algunos, si no todos, de los elementos secundarios de su componente, así como también configurar el estado y las dependencias del complemento (por ejemplo, Pinia).
+
+   Las pruebas que son "pruebas Whitebox" conocen los detalles de implementación y las dependencias de un componente. Se centran en aislar el componente bajo prueba. Estas pruebas generalmente implicarán burlarse de algunos, si no todos, de los elementos secundarios de su componente, así como también configurar el estado y las dependencias del complemento (por ejemplo, Pinia).
 
 2. Blackbox: prueba de componentes
 
-    Las pruebas que son "pruebas Blackbox" desconocen los detalles de implementación de un componente. Estas pruebas se burlan lo menos posible para probar la integración de su componente y todo el sistema. Por lo general, representan todos los componentes secundarios y se consideran más como una "prueba de integración". Consulte las recomendaciones de [prueba de componentes](#component-testing) a continuación.
+   Las pruebas que son "pruebas Blackbox" desconocen los detalles de implementación de un componente. Estas pruebas se burlan lo menos posible para probar la integración de su componente y todo el sistema. Por lo general, representan todos los componentes secundarios y se consideran más como una "prueba de integración". Consulte las recomendaciones de [prueba de componentes](#component-testing) a continuación.
 
 ### Recomendación
+
 ​
+
 - [Vitest](https://vitest.dev/)
 
-    Dado que la configuración oficial creada por create-vue se basa en [Vite](https://vitejs.dev/), recomendamos usar un marco de pruebas unitarias que pueda aprovechar la misma configuración y transformar la canalización directamente desde Vite. [Vitest](https://vitest.dev/) es un marco de pruebas unitarias diseñado específicamente para este propósito, creado y mantenido por los miembros del equipo de Vue/Vite. Se integra con proyectos basados en Vite con un esfuerzo mínimo y es increíblemente rápido.
+  Dado que la configuración oficial creada por create-vue se basa en [Vite](https://vitejs.dev/), recomendamos usar un marco de pruebas unitarias que pueda aprovechar la misma configuración y transformar la canalización directamente desde Vite. [Vitest](https://vitest.dev/) es un marco de pruebas unitarias diseñado específicamente para este propósito, creado y mantenido por los miembros del equipo de Vue/Vite. Se integra con proyectos basados en Vite con un esfuerzo mínimo y es increíblemente rápido.
 
 ### Otras opciones
+
 ​
+
 - [Peeky](https://peeky.dev/) es otro corredor rápido de pruebas unitarias con integración Vite de primera clase. También lo crea un miembro del equipo central de Vue y ofrece una interfaz de prueba basada en GUI.
 - [Jest](https://jestjs.io/) es un marco de prueba de unidad popular y se puede hacer que funcione con Vite a través del paquete [vite-jest](https://github.com/sodatea/vite-jest). Sin embargo, solo recomendamos Jest si tiene un conjunto de pruebas de Jest existente que debe migrarse a un proyecto basado en Vite, ya que Vitest ofrece una integración más fluida y un mejor rendimiento.
 
 ## Component Testing
 
-En las aplicaciones Vue, los componentes son los principales bloques de construcción de la interfaz de usuario. Por lo tanto, los componentes son la unidad natural de aislamiento cuando se trata de validar el comportamiento de su aplicación. ***Desde una perspectiva de granularidad, las pruebas de componentes se encuentran en algún lugar por encima de las pruebas unitarias y pueden considerarse una forma de prueba de integración***. Gran parte de su aplicación Vue debe estar cubierta por una prueba de componente y recomendamos que cada componente Vue tenga su propio archivo de especificaciones (spec).
+En las aplicaciones Vue, los componentes son los principales bloques de construcción de la interfaz de usuario. Por lo tanto, los componentes son la unidad natural de aislamiento cuando se trata de validar el comportamiento de su aplicación. **_Desde una perspectiva de granularidad, las pruebas de componentes se encuentran en algún lugar por encima de las pruebas unitarias y pueden considerarse una forma de prueba de integración_**. Gran parte de su aplicación Vue debe estar cubierta por una prueba de componente y recomendamos que cada componente Vue tenga su propio archivo de especificaciones (spec).
 
 Las pruebas de componentes deben detectar problemas relacionados con los accesorios, los eventos, las ranuras que proporciona, los estilos, las clases, los ganchos del ciclo de vida y más de su componente.
 
@@ -117,9 +124,9 @@ Las pruebas de componentes deben centrarse en las interfaces públicas del compo
 
 - Para la lógica de comportamiento: afirme las actualizaciones de procesamiento correctas o los eventos emitidos en respuesta a los eventos de entrada del usuario.
 
-    En el siguiente ejemplo, demostramos un componente Stepper que tiene un elemento DOM etiquetado como "incremento" y se puede hacer clic. Pasamos un accesorio llamado `max` que evita que Stepper se incremente más allá de `2`, por lo que si hacemos clic en el botón 3 veces, la interfaz de usuario aún debería decir `2`.
+  En el siguiente ejemplo, demostramos un componente Stepper que tiene un elemento DOM etiquetado como "incremento" y se puede hacer clic. Pasamos un accesorio llamado `max` que evita que Stepper se incremente más allá de `2`, por lo que si hacemos clic en el botón 3 veces, la interfaz de usuario aún debería decir `2`.
 
-    No sabemos nada sobre la implementación de Stepper, solo que la "entrada" es el apoyo `max` y la "salida" es el estado del DOM como lo verá el usuario.
+  No sabemos nada sobre la implementación de Stepper, solo que la "entrada" es el apoyo `max` y la "salida" es el estado del DOM como lo verá el usuario.
 
 ```js
 const valueSelector = '[data-testid=stepper-value]'
@@ -127,8 +134,8 @@ const buttonSelector = '[data-testid=increment]'
 
 const wrapper = mount(Stepper, {
   props: {
-    max: 1
-  }
+    max: 1,
+  },
 })
 
 expect(wrapper.find(valueSelector).text()).toContain('0')
@@ -157,6 +164,7 @@ expect(wrapper.find(valueSelector).text()).toContain('1')
 Las principales diferencias entre Vitest y los corredores basados en navegador son la velocidad y el contexto de ejecución. En resumen, los ejecutores basados en navegador, como Cypress, pueden detectar problemas que los ejecutores basados en nodos, como Vitest, no pueden (por ejemplo, problemas de estilo, eventos DOM nativos reales, cookies, almacenamiento local y fallas de red), pero los ejecutores basados en navegador son órdenes de magnitud más lentos que Vitest porque abren un navegador, compilan sus hojas de estilo y más. Cypress es un corredor basado en navegador que admite pruebas de componentes. Lea la [página de comparación de Vitest](https://vitest.dev/guide/comparisons.html#cypress) para obtener la información más reciente que compara Vitest y Cypress.
 
 ### Bibliotecas de montaje
+
 ​
 La prueba de componentes a menudo implica montar el componente que se está probando de forma aislada, desencadenar eventos de entrada de usuario simulados y afirmar en la salida DOM renderizada. Hay bibliotecas de utilidades dedicadas que simplifican estas tareas.
 
@@ -167,16 +175,17 @@ La prueba de componentes a menudo implica montar el componente que se está prob
 Recomendamos usar `@vue/test-utils` para probar componentes en aplicaciones. `@testing-library/vue` tiene problemas con la prueba del componente asincrónico con Suspense, por lo que debe usarse con precaución.
 
 ### Otras opciones
+
 ​
+
 - [Nightwatch](https://nightwatchjs.org/) es un corredor de pruebas E2E con compatibilidad con Vue Component Testing. ([Proyecto de ejemplo](https://github.com/nightwatchjs-community/todo-vue) en Nightwatch v2)
 
-
 ## E2E Testing
-
 
 ## Recetas
 
 ### Agregar Vitest a un proyecto
+
 ​
 En un proyecto Vue basado en Vite, ejecute:
 
@@ -197,8 +206,8 @@ export default defineConfig({
     globals: true,
     // simulate DOM with happy-dom
     // (requires installing happy-dom as a peer dependency)
-    environment: 'happy-dom'
-  }
+    environment: 'happy-dom',
+  },
 })
 ```
 
@@ -213,7 +222,7 @@ test('it should work', () => {
   const { getByText } = render(MyComponent, {
     props: {
       /* ... */
-    }
+    },
   })
 
   // assert output
@@ -235,6 +244,5 @@ Finalmente, actualice `package.json` para agregar el script de prueba y ejecúte
 ```sh
 > npm test
 ```
-
 
 ## Testing Composables
