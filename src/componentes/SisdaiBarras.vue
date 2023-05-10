@@ -1,5 +1,10 @@
 <script setup></script>
 
 <template>
-  <h2>Hola soy una gráfica de barras</h2>
+  <g :transform="`translate(20,20)`">
+    <circle
+      r="10"
+      fill="#AB7C94"
+    />
+  </g>
 </template>
