@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import { describe, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import SisdaiBarras from '@/componentes/SisdaiBarras.vue'
 
 describe('SisdaiBarras', () => {
