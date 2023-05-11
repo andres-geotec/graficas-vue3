@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 import { idAleatorio } from '@/utils'
 import usarGraficas from '@/composables/usarGraficas'
 
@@ -12,11 +12,19 @@ const props = defineProps({
     type: Object,
     default: () => ({ arriba: 20, abajo: 20, derecha: 20, izquierda: 20 }),
   },
+  propiedad: {
+    type: Number,
+    default: 20,
+  },
 })
 
-const { borrarGrafica } = usarGraficas(props.id)
+usarGraficas().intanciarGrafica(props.id)
 
-const { margenes } = toRefs(props)
+const { guardarPopiedad } = usarGraficas().vincular(props.id)
+const { margenes, propiedad } = toRefs(props)
+
+guardarPopiedad(propiedad.value)
+watch(propiedad, guardarPopiedad)
 
 const contenedorSisdaiGraficas = ref(null)
 
@@ -33,7 +41,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  borrarGrafica(props.id)
+  usarGraficas().borrarGrafica(props.id)
 })
 </script>
 

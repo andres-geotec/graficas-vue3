@@ -1,5 +1,8 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import usarGraficas from '@/composables/usarGraficas'
+
+defineProps({})
 
 const barras = ref(null)
 
@@ -9,6 +12,13 @@ function obteniendoIdPadre() {
 
 onMounted(() => {
   console.log(obteniendoIdPadre())
+
+  const { propiedad } = usarGraficas().vincular(obteniendoIdPadre())
+
+  console.log(propiedad.value)
+  watch(propiedad, n => {
+    console.log('barras', n)
+  })
 })
 </script>
 

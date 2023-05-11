@@ -1,4 +1,5 @@
 import { reactive, ref, watch } from 'vue'
+// import usarGraficas from './usarGraficas'
 
 export default function () {
   const dimenciones = reactive({
