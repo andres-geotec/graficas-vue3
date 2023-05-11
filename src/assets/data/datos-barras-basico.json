@@ -1,0 +1,6 @@
+[
+  { "categoria": "aguascalientes", "cantidad": 100 },
+  { "categoria": "baja_cal", "cantidad": 80 },
+  { "categoria": "baja_cal_sur", "cantidad": 20 },
+  { "categoria": "zacatecas", "cantidad": 20 }
+]

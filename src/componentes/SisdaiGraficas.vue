@@ -1,17 +1,22 @@
 <script setup>
-import { onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
+import { idAleatorio } from '@/utils'
+import usarGraficas from '@/composables/usarGraficas'
 
 const props = defineProps({
+  id: {
+    type: String,
+    default: () => idAleatorio(),
+  },
   margenes: {
     type: Object,
     default: () => ({ arriba: 20, abajo: 20, derecha: 20, izquierda: 20 }),
   },
 })
 
+const { borrarGrafica } = usarGraficas(props.id)
+
 const { margenes } = toRefs(props)
-watch(margenes, ({ arriba, abajo, derecha, izquierda }) => {
-  console.log(arriba, abajo, derecha, izquierda)
-})
 
 const contenedorSisdaiGraficas = ref(null)
 
@@ -21,20 +26,20 @@ const dimenciones = reactive({
 })
 
 onMounted(() => {
-  // console.log(contenedorSisdaiGraficas.value.clientWidth)
-  console.log(margenes.value)
-
   dimenciones.ancho = contenedorSisdaiGraficas.value.clientWidth
   dimenciones.alto = dimenciones.ancho * 0.5
 
   // console.log(dimenciones.ancho, dimenciones.alto)
 })
 
-onUnmounted(() => {})
+onUnmounted(() => {
+  borrarGrafica(props.id)
+})
 </script>
 
 <template>
   <div
+    :id="id"
     class="contenedor-sisdai-graficas"
     ref="contenedorSisdaiGraficas"
   >
@@ -44,7 +49,22 @@ onUnmounted(() => {})
       :width="dimenciones.ancho"
       :height="dimenciones.alto"
     >
+      <g class="eje-x-arriba" />
+      <g class="eje-y-derecha" />
       <slot />
+      <g
+        class="eje-x-abajo"
+        :transform="`translate(${margenes.izquierda}, ${
+          dimenciones.alto - margenes.abajo
+        })`"
+      >
+        <rect
+          height="20"
+          width="20"
+          fill="#AB7C94"
+        />
+      </g>
+      <g class="eje-y-izquierda" />
     </svg>
   </div>
 </template>
