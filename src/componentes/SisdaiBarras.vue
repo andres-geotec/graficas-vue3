@@ -11,13 +11,12 @@ function obteniendoIdPadre() {
 }
 
 onMounted(() => {
-  console.log(obteniendoIdPadre())
+  // console.log(obteniendoIdPadre())
 
-  const { propiedad } = usarGraficas().vincular(obteniendoIdPadre())
+  const { margenes } = usarGraficas().vincular(obteniendoIdPadre())
 
-  console.log(propiedad.value)
-  watch(propiedad, n => {
-    console.log('barras', n)
+  watch(margenes, ({ arriba, abajo, derecha, izquierda }) => {
+    console.log('barras', arriba, abajo, derecha, izquierda)
   })
 })
 </script>

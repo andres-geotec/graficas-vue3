@@ -16,14 +16,15 @@ const margenes = ref(30)
     <label for="margenes">{{ margenes }}</label>
 
     <hr />
-    <!-- :margenes="{
+
+    <SisdaiGraficas
+      :margenes="{
         arriba: margenes,
         abajo: margenes,
         derecha: margenes,
         izquierda: margenes,
-      }" -->
-
-    <SisdaiGraficas :propiedad="Number(margenes)">
+      }"
+    >
       <SisdaiBarras />
     </SisdaiGraficas>
 

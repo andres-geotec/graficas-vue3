@@ -12,19 +12,15 @@ const props = defineProps({
     type: Object,
     default: () => ({ arriba: 20, abajo: 20, derecha: 20, izquierda: 20 }),
   },
-  propiedad: {
-    type: Number,
-    default: 20,
-  },
 })
 
 usarGraficas().intanciarGrafica(props.id)
 
-const { guardarPopiedad } = usarGraficas().vincular(props.id)
-const { margenes, propiedad } = toRefs(props)
+const { guardarMargenes } = usarGraficas().vincular(props.id)
+const { margenes } = toRefs(props)
 
-guardarPopiedad(propiedad.value)
-watch(propiedad, guardarPopiedad)
+guardarMargenes(margenes.value)
+watch(margenes, guardarMargenes)
 
 const contenedorSisdaiGraficas = ref(null)
 

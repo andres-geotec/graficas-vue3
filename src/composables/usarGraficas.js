@@ -1,4 +1,4 @@
-import { reactive, ref, watch } from 'vue'
+import { reactive, readonly, ref, watch } from 'vue'
 // import usarDimenciones from './usarDimenciones'
 
 const graficas = reactive({})
@@ -18,25 +18,24 @@ export default function () {
   function vincular(_idGrafica) {
     const grafica = () => graficas[_idGrafica]
 
-    const propiedad = ref(grafica()?.propiedad)
-    // console.log('propiedad inicial', propiedad.value)
+    const margenes = ref(grafica()?.margenes)
+    // console.log('margenes inicial', margenes.value)
 
-    function guardarPopiedad(_propiedad) {
-      grafica().propiedad = _propiedad
-      // console.log('guardarPopiedad', grafica().propiedad)
+    function guardarMargenes(_margenes) {
+      grafica().margenes = _margenes
+      // console.log('guardarMargenes', grafica().margenes)
     }
     watch(
-      () => grafica()?.propiedad,
+      () => grafica()?.margenes,
       n => {
-        propiedad.value = n
+        margenes.value = n
       }
     )
 
     return {
       grafica,
-      propiedad: propiedad,
-      // propiedad: readonly(grafica().propiedad),
-      guardarPopiedad,
+      margenes: readonly(margenes),
+      guardarMargenes,
     }
   }
 
