@@ -1,30 +1,29 @@
-import { computed, readonly } from 'vue'
+import { computed } from 'vue'
 import usarGraficas from './usarGraficas'
 
 export default function (idGrafica) {
-  const { grafica } = usarGraficas().vincular(idGrafica)
+  const grafica = usarGraficas().grafica(idGrafica)
 
-  const alto = computed(() => grafica()?.alto)
-  function guardarAlto(_alto) {
-    grafica().alto = _alto
-  }
+  const propiedad = computed(() => grafica?.propiedad)
+  const guardarPropiedad = _propiedad => (grafica.propiedad = _propiedad)
 
-  const margenes = computed({
-    set: _margenes => (grafica().margenes = _margenes),
-    get: () => grafica()?.margenes,
-  })
+  const alto = computed(() => grafica?.alto)
+  const guardarAlto = _alto => (grafica.alto = _alto)
 
-  const propiedad = computed(() => grafica()?.propiedad)
-  function guardarPropiedad(_propiedad) {
-    grafica().propiedad = _propiedad
-  }
+  const ancho = computed(() => grafica?.ancho)
+  const guardarAncho = _ancho => (grafica.ancho = _ancho)
+
+  const margenes = computed(() => grafica?.margenes)
+  const guardarMargenes = _margenes => (grafica.margenes = _margenes)
 
   return {
-    alto,
-    guardarAlto,
-    margenes: readonly(margenes),
-    guardarMargenes: _margenes => (margenes.value = _margenes),
     propiedad,
     guardarPropiedad,
+    alto,
+    guardarAlto,
+    ancho,
+    guardarAncho,
+    margenes,
+    guardarMargenes,
   }
 }

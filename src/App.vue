@@ -36,6 +36,6 @@ const margenes = ref(30)
 
     <hr />
 
-    <SisdaiGraficas></SisdaiGraficas>
+    <SisdaiGraficas> 50"></SisdaiGraficas>
   </div>
 </template>

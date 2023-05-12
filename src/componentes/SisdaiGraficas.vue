@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 import { idAleatorio } from '@/utils'
 import usarGraficas from '@/composables/usarGraficas'
-import usarDimenciones from '@/composables/usarDimenciones'
 
 const props = defineProps({
   id: {
@@ -16,38 +15,36 @@ const props = defineProps({
   propiedad: { type: Number, default: 0 },
 })
 
-usarGraficas().intanciarGrafica(props.id)
+const { borrarGrafica, usarDimenciones } = usarGraficas(props.id)
+const { guardarPropiedad, guardarMargenes, alto, guardarAlto } =
+  usarDimenciones(props.id)
 
-const { guardarMargenes } = usarGraficas().vincular(props.id)
-const { margenes, propiedad } = toRefs(props)
-
-const { guardarPropiedad } = usarDimenciones(props.id)
-
+const { propiedad, margenes } = toRefs(props)
 guardarPropiedad(propiedad.value)
-watch(propiedad, n => {
-  guardarPropiedad(n)
-  // console.log('grafica propiedad', n)
-})
+watch(propiedad, guardarPropiedad)
 
 guardarMargenes(margenes.value)
 watch(margenes, guardarMargenes)
 
+guardarAlto(0)
+
 const contenedorSisdaiGraficas = ref(null)
 
 const dimenciones = reactive({
-  alto: 0,
+  alto: undefined,
   ancho: 0,
 })
 
 onMounted(() => {
   dimenciones.ancho = contenedorSisdaiGraficas.value.clientWidth
   dimenciones.alto = dimenciones.ancho * 0.5
+  guardarAlto(dimenciones.ancho * 0.5)
 
   // console.log(dimenciones.ancho, dimenciones.alto)
 })
 
 onUnmounted(() => {
-  usarGraficas().borrarGrafica(props.id)
+  borrarGrafica()
 })
 </script>
 
@@ -61,7 +58,7 @@ onUnmounted(() => {
 
     <svg
       :width="dimenciones.ancho"
-      :height="dimenciones.alto"
+      :height="alto"
     >
       <g class="eje-x-arriba" />
       <g class="eje-y-derecha" />
@@ -69,7 +66,7 @@ onUnmounted(() => {
       <g
         class="eje-x-abajo"
         :transform="`translate(${margenes.izquierda}, ${
-          dimenciones.alto - margenes.abajo
+          alto - margenes.abajo
         })`"
       >
         <rect

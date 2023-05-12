@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref, toRefs, watch } from 'vue'
-import usarGraficas from '@/composables/usarGraficas'
 import usarDimenciones from '@/composables/usarDimenciones'
 
 const props = defineProps({
@@ -46,20 +45,18 @@ function obteniendoIdPadre() {
 }
 
 const margenesPadre = ref({})
-// watch(margenesPadre, ({ arriba, abajo, derecha, izquierda }) => {
-//   console.log('barras', arriba, abajo, derecha, izquierda)
-// })
 
 onMounted(() => {
-  // console.log(barras.value.parentElement)
+  const { margenes, alto } = usarDimenciones(obteniendoIdPadre())
 
-  const { margenes } = usarGraficas().vincular(obteniendoIdPadre())
-  watch(margenes, n => (margenesPadre.value = n))
+  margenesPadre.value = margenes.value
+  watch(margenes, n => {
+    margenesPadre.value = n
+    // console.log('barras margenes', n)
+  })
 
-  const { propiedad } = usarDimenciones(obteniendoIdPadre())
-
-  watch(propiedad, n => {
-    console.log('barras propiedad', n)
+  watch(alto, n => {
+    console.log('barras alto', n)
   })
 })
 </script>
@@ -67,7 +64,9 @@ onMounted(() => {
 <template>
   <g
     ref="barras"
-    :transform="`translate(20,20)`"
+    :transform="`translate(${margenesPadre?.izquierda || 0},${
+      margenesPadre?.arriba || 0
+    })`"
   >
     <circle
       r="10"

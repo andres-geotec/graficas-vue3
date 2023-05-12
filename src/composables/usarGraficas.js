@@ -1,54 +1,52 @@
-import { reactive, readonly, ref, watch } from 'vue'
+import { reactive } from 'vue'
+import _usarDimenciones from '@/composables/usarDimenciones'
 
-const graficas = reactive({})
+let graficas = {}
 
-export default function () {
+export default function (idGrafica) {
   const graficaEsxiste = _idGrafica =>
     Object.keys(graficas).includes(_idGrafica)
 
   function intanciarGrafica(_idGrafica) {
-    if (!graficaEsxiste(_idGrafica)) graficas[_idGrafica] = reactive({})
+    if (!graficaEsxiste(_idGrafica)) {
+      graficas[_idGrafica] = reactive({})
+      console.log(`grafica ${_idGrafica} instanciada`)
+    }
+  }
+
+  const idGraficaValida = () =>
+    idGrafica !== undefined && typeof idGrafica === typeof String()
+
+  if (idGraficaValida()) {
+    intanciarGrafica(idGrafica)
   }
 
   function borrarGrafica(_idGrafica) {
-    delete graficas[_idGrafica]
+    const graficaParaBorrar = idGrafica || _idGrafica
+    if (graficaEsxiste(graficaParaBorrar)) {
+      delete graficas[graficaParaBorrar]
+      console.log(`grafica ${graficaParaBorrar} borrada`)
+    }
   }
 
-  function vincular(_idGrafica) {
-    const grafica = () => graficas[_idGrafica]
-
-    const margenes = ref(grafica()?.margenes)
-    // console.log('margenes inicial', margenes.value)
-    function guardarMargenes(_margenes) {
-      grafica().margenes = _margenes
-      // console.log('guardarMargenes', grafica().margenes)
+  function grafica(_idGrafica) {
+    const graficaParaConsultar = idGrafica || _idGrafica
+    if (graficaEsxiste(graficaParaConsultar)) {
+      return graficas[_idGrafica]
     }
-    watch(
-      () => grafica()?.margenes,
-      n => (margenes.value = n)
-    )
 
-    const dimenciones = ref(grafica()?.dimenciones)
-    function guardarDimenciones(_dimenciones) {
-      grafica().dimenciones = _dimenciones
-    }
-    watch(
-      () => grafica()?.dimenciones,
-      n => (dimenciones.value = n)
-    )
+    // eslint-disable-next-line
+    console.warn(`No se encontró la gráfica ${graficaParaConsultar}`)
+  }
 
-    return {
-      grafica,
-      guardarMargenes,
-      margenes: readonly(margenes),
-      guardarDimenciones,
-      dimenciones: readonly(dimenciones),
-    }
+  function usarDimenciones(_idGrafica) {
+    return _usarDimenciones(_idGrafica)
   }
 
   return {
     intanciarGrafica,
     borrarGrafica,
-    vincular,
+    grafica,
+    usarDimenciones,
   }
 }
