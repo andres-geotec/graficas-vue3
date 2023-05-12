@@ -1,5 +1,4 @@
 import { reactive, readonly, ref, watch } from 'vue'
-// import usarDimenciones from './usarDimenciones'
 
 const graficas = reactive({})
 
@@ -20,22 +19,30 @@ export default function () {
 
     const margenes = ref(grafica()?.margenes)
     // console.log('margenes inicial', margenes.value)
-
     function guardarMargenes(_margenes) {
       grafica().margenes = _margenes
       // console.log('guardarMargenes', grafica().margenes)
     }
     watch(
       () => grafica()?.margenes,
-      n => {
-        margenes.value = n
-      }
+      n => (margenes.value = n)
+    )
+
+    const dimenciones = ref(grafica()?.dimenciones)
+    function guardarDimenciones(_dimenciones) {
+      grafica().dimenciones = _dimenciones
+    }
+    watch(
+      () => grafica()?.dimenciones,
+      n => (dimenciones.value = n)
     )
 
     return {
       grafica,
-      margenes: readonly(margenes),
       guardarMargenes,
+      margenes: readonly(margenes),
+      guardarDimenciones,
+      dimenciones: readonly(dimenciones),
     }
   }
 

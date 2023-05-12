@@ -1,20 +1,30 @@
-import { reactive, ref, watch } from 'vue'
-// import usarGraficas from './usarGraficas'
+import { computed, readonly } from 'vue'
+import usarGraficas from './usarGraficas'
 
-export default function () {
-  const dimenciones = reactive({
-    alto: 0,
-    ancho: 0,
+export default function (idGrafica) {
+  const { grafica } = usarGraficas().vincular(idGrafica)
+
+  const alto = computed(() => grafica()?.alto)
+  function guardarAlto(_alto) {
+    grafica().alto = _alto
+  }
+
+  const margenes = computed({
+    set: _margenes => (grafica().margenes = _margenes),
+    get: () => grafica()?.margenes,
   })
 
-  const margenes = ref()
-
-  watch(margenes, ({ arriba, abajo, derecha, izquierda }) => {
-    console.log('composable', arriba, abajo, derecha, izquierda)
-  })
+  const propiedad = computed(() => grafica()?.propiedad)
+  function guardarPropiedad(_propiedad) {
+    grafica().propiedad = _propiedad
+  }
 
   return {
-    dimenciones,
-    margenes,
+    alto,
+    guardarAlto,
+    margenes: readonly(margenes),
+    guardarMargenes: _margenes => (margenes.value = _margenes),
+    propiedad,
+    guardarPropiedad,
   }
 }

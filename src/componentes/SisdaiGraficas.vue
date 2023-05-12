@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 import { idAleatorio } from '@/utils'
 import usarGraficas from '@/composables/usarGraficas'
+import usarDimenciones from '@/composables/usarDimenciones'
 
 const props = defineProps({
   id: {
@@ -12,12 +13,21 @@ const props = defineProps({
     type: Object,
     default: () => ({ arriba: 20, abajo: 20, derecha: 20, izquierda: 20 }),
   },
+  propiedad: { type: Number, default: 0 },
 })
 
 usarGraficas().intanciarGrafica(props.id)
 
 const { guardarMargenes } = usarGraficas().vincular(props.id)
-const { margenes } = toRefs(props)
+const { margenes, propiedad } = toRefs(props)
+
+const { guardarPropiedad } = usarDimenciones(props.id)
+
+guardarPropiedad(propiedad.value)
+watch(propiedad, n => {
+  guardarPropiedad(n)
+  // console.log('grafica propiedad', n)
+})
 
 guardarMargenes(margenes.value)
 watch(margenes, guardarMargenes)
