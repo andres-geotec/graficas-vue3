@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import datos from '@/assets/data/datos-barras-basico.json'
 import variables from '@/assets/data/variables-barras-basico.json'
 
-const margenes = ref(30)
+const margen = ref(30)
 </script>
 
 <template>
@@ -13,20 +13,19 @@ const margenes = ref(30)
     <input
       id="margenes"
       type="range"
-      v-model="margenes"
+      v-model="margen"
     />
-    <label for="margenes">{{ margenes }}</label>
+    <label for="margenes">margen: {{ margen }}</label>
 
     <hr />
 
     <SisdaiGraficas
       :margenes="{
-        arriba: Number(margenes),
-        abajo: Number(margenes),
-        derecha: Number(margenes),
-        izquierda: Number(margenes),
+        arriba: Number(margen),
+        abajo: Number(margen),
+        derecha: Number(margen),
+        izquierda: Number(margen),
       }"
-      :propiedad="Number(margenes)"
     >
       <SisdaiBarras
         :datos="datos"
@@ -36,6 +35,11 @@ const margenes = ref(30)
 
     <hr />
 
-    <SisdaiGraficas> 50"></SisdaiGraficas>
+    <SisdaiGraficas>
+      <SisdaiBarras
+        :datos="datos"
+        :variables="variables"
+      />
+    </SisdaiGraficas>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
+import { onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { idAleatorio } from '@/utils'
 import usarGraficas from '@/composables/usarGraficas'
 
@@ -12,35 +12,25 @@ const props = defineProps({
     type: Object,
     default: () => ({ arriba: 20, abajo: 20, derecha: 20, izquierda: 20 }),
   },
-  propiedad: { type: Number, default: 0 },
 })
 
 const { borrarGrafica, usarDimenciones } = usarGraficas(props.id)
-const { guardarPropiedad, guardarMargenes, alto, guardarAlto } =
+const { guardarMargenes, alto, guardarAlto, ancho, guardarAncho } =
   usarDimenciones(props.id)
 
-const { propiedad, margenes } = toRefs(props)
-guardarPropiedad(propiedad.value)
-watch(propiedad, guardarPropiedad)
+const { margenes } = toRefs(props)
 
 guardarMargenes(margenes.value)
 watch(margenes, guardarMargenes)
 
 guardarAlto(0)
+guardarAncho(0)
 
 const contenedorSisdaiGraficas = ref(null)
 
-const dimenciones = reactive({
-  alto: undefined,
-  ancho: 0,
-})
-
 onMounted(() => {
-  dimenciones.ancho = contenedorSisdaiGraficas.value.clientWidth
-  dimenciones.alto = dimenciones.ancho * 0.5
-  guardarAlto(dimenciones.ancho * 0.5)
-
-  // console.log(dimenciones.ancho, dimenciones.alto)
+  guardarAncho(contenedorSisdaiGraficas.value.clientWidth)
+  guardarAlto(ancho.value * 0.5)
 })
 
 onUnmounted(() => {
@@ -54,10 +44,10 @@ onUnmounted(() => {
     class="contenedor-sisdai-graficas"
     ref="contenedorSisdaiGraficas"
   >
-    <h1>Hola soy el contenedor de gráficas</h1>
+    <h1>Hola soy el contenedor de gráficas {{ id }}</h1>
 
     <svg
-      :width="dimenciones.ancho"
+      :width="ancho"
       :height="alto"
     >
       <g class="eje-x-arriba" />
@@ -68,13 +58,7 @@ onUnmounted(() => {
         :transform="`translate(${margenes.izquierda}, ${
           alto - margenes.abajo
         })`"
-      >
-        <rect
-          height="20"
-          width="20"
-          fill="#AB7C94"
-        />
-      </g>
+      />
       <g class="eje-y-izquierda" />
     </svg>
   </div>

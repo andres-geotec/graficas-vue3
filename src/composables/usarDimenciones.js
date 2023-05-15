@@ -4,9 +4,6 @@ import usarGraficas from './usarGraficas'
 export default function (idGrafica) {
   const grafica = usarGraficas().grafica(idGrafica)
 
-  const propiedad = computed(() => grafica?.propiedad)
-  const guardarPropiedad = _propiedad => (grafica.propiedad = _propiedad)
-
   const alto = computed(() => grafica?.alto)
   const guardarAlto = _alto => (grafica.alto = _alto)
 
@@ -17,8 +14,6 @@ export default function (idGrafica) {
   const guardarMargenes = _margenes => (grafica.margenes = _margenes)
 
   return {
-    propiedad,
-    guardarPropiedad,
     alto,
     guardarAlto,
     ancho,

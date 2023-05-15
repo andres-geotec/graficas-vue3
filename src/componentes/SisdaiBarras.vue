@@ -1,6 +1,9 @@
 <script setup>
 import { onMounted, ref, toRefs, watch } from 'vue'
 import usarDimenciones from '@/composables/usarDimenciones'
+import { scaleBand } from 'd3-scale'
+import { select } from 'd3-selection'
+import { axisBottom } from 'd3-axis'
 
 const props = defineProps({
   datos: {
@@ -34,9 +37,7 @@ const props = defineProps({
   },
 })
 
-const { datos } = toRefs(props)
-
-console.log(datos.value)
+const { datos, clave_categorias } = toRefs(props)
 
 const barras = ref(null)
 
@@ -44,20 +45,35 @@ function obteniendoIdPadre() {
   return barras.value.parentElement.parentElement?.id
 }
 
-const margenesPadre = ref({})
+const margenesPadre = ref({}),
+  anchoPadre = ref(0),
+  escalaBanda = ref()
+
+watch(anchoPadre, nv => {
+  if (nv && nv !== 0) {
+    escalaBanda.value = scaleBand()
+      .domain(datos.value?.map(d => d[clave_categorias.value]))
+      .range([
+        0,
+        anchoPadre.value -
+          margenesPadre.value.izquierda -
+          margenesPadre.value.derecha,
+      ])
+    // console.log(select(`div#${obteniendoIdPadre()} svg g.eje-x`))
+    select(`div#${obteniendoIdPadre()} svg g.eje-x-abajo`).call(
+      axisBottom(escalaBanda.value)
+    )
+  }
+})
 
 onMounted(() => {
-  const { margenes, alto } = usarDimenciones(obteniendoIdPadre())
+  const { margenes, ancho } = usarDimenciones(obteniendoIdPadre())
 
   margenesPadre.value = margenes.value
-  watch(margenes, n => {
-    margenesPadre.value = n
-    // console.log('barras margenes', n)
-  })
+  watch(margenes, nv => (margenesPadre.value = nv))
 
-  watch(alto, n => {
-    console.log('barras alto', n)
-  })
+  anchoPadre.value = ancho.value
+  watch(ancho, nv => (anchoPadre.value = nv))
 })
 </script>
 

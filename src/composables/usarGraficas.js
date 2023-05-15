@@ -40,7 +40,13 @@ export default function (idGrafica) {
   }
 
   function usarDimenciones(_idGrafica) {
-    return _usarDimenciones(_idGrafica)
+    const graficaParaConsultar = idGrafica || _idGrafica
+    if (graficaEsxiste(graficaParaConsultar)) {
+      return _usarDimenciones(_idGrafica)
+    }
+
+    // eslint-disable-next-line
+    console.warn(`No se encontró la gráfica ${graficaParaConsultar}`)
   }
 
   return {

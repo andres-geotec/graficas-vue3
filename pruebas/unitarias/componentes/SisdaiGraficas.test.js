@@ -4,8 +4,16 @@ import SisdaiGraficas from '@/componentes/SisdaiGraficas.vue'
 
 describe('SisdaiGraficas', () => {
   test('primeras pruebas', () => {
-    const wrapper = shallowMount(SisdaiGraficas)
+    const wrapper = shallowMount(SisdaiGraficas, {
+      props: {
+        id: 'x',
+      },
+    })
 
-    expect(wrapper.get('h1').text()).toBe('Hola soy el contenedor de gráficas')
+    expect(wrapper.get('h1').text()).toBe(
+      'Hola soy el contenedor de gráficas x'
+    )
+
+    console.log(wrapper.html())
   })
 })
